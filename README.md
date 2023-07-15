@@ -5,3 +5,5 @@
 [Level 2] Password encryption
 
 [Level 3] Password Hashing
+
+[Level 4] Password Hashing and Salting
