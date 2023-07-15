@@ -4,6 +4,8 @@
 
 [Level 2] Password encryption
 
-[Level 3] Password Hashing
+[Level 3] Password hashing
 
-[Level 4] Password Hashing and Salting
+[Level 4] Password hashing and salting
+
+[Level 5] Cookies and sessions
