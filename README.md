@@ -9,3 +9,5 @@
 [Level 4] Password hashing and salting
 
 [Level 5] Cookies and sessions
+
+[Level 6] OAuth 2.0 with Google
