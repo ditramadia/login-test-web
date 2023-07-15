@@ -26,7 +26,8 @@ mongoose.connect("mongodb://127.0.0.1:27017/userDB", {useNewUrlParser: true});
 const userSchema = new mongoose.Schema({
     email: String,
     password: String,
-    googleId: String
+    googleId: String,
+    secret: String
 });
 userSchema.plugin(passportLocalMongoose);
 userSchema.plugin(findOrCreate);
@@ -97,11 +98,11 @@ app.post("/register", (req, res) => {
 });
 
 app.get("/secrets", (req, res) => {
-    if (req.isAuthenticated()) {
-        res.render("secrets");
-    } else {
-        res.redirect("/login");
-    }
+    User.find({"secret": {$ne:null}}).then((user) => {
+        res.render("secrets", {usersWithSecrets: user});
+    }).catch((err) => {
+        res.send(err);
+    })
 });
 
 app.get("/logout", (req, res) => {
@@ -123,6 +124,28 @@ app.get("/auth/google/secrets",
     (req, res) => {
         res.redirect("/secrets");
 });
+
+app.get("/submit", (req, res) => {
+    if (req.isAuthenticated()) {
+        res.render("submit");
+    } else {
+        res.redirect("/login");
+    }
+});
+
+app.post("/submit", (req, res) => {
+    const submittedSecret = req.body.secret;
+    User.findById(req.user.id).then((user) => {
+        if (user) {
+            user.secret = submittedSecret;
+            user.save().then(() => {
+                res.redirect("/secrets");
+            });
+        }
+    }).catch((err) => {
+        res.send(err);
+    })
+})
 
 app.listen(3000, () => {
     console.log("Server started on port 3000.");
